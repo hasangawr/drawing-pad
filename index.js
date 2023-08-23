@@ -1,11 +1,14 @@
-const container = document.querySelector('.container');
+const outerDiv = document.querySelector('.outer');
+const button = document.querySelector('.btn');
 
-const createDrawingPad = function (size = 16, outerDiv = container, outerDivSize = 720) {
+const createDrawingPad = function (size = 16) {
+
+    outerDiv.replaceChildren();
 
     for (let index = 0; index < size; index++) {
 
         const rowDiv = document.createElement('div');
-        container.appendChild(rowDiv);
+        outerDiv.appendChild(rowDiv);
 
         rowDiv.style.setProperty('flex', '1 1 auto');
         rowDiv.style.setProperty('display', 'flex');
@@ -27,11 +30,20 @@ const createDrawingPad = function (size = 16, outerDiv = container, outerDivSize
 
 const main = function () {
 
-    container.style.setProperty('display', 'flex');
-    container.style.setProperty('flex-direction', 'column');
+    outerDiv.style.setProperty('display', 'flex');
+    outerDiv.style.setProperty('flex', '0 0 auto');
+    outerDiv.style.setProperty('flex-direction', 'column');
 
     createDrawingPad();
 
+    button.addEventListener('click', () => {
+        const gridSize = Number(prompt('Enter no. of squares per a side: '));
+        if(gridSize > 0 && gridSize < 101) {
+            createDrawingPad(gridSize);
+        } else {
+            alert('Grid size should be greater than 0 & not more than 100!');
+        }
+    });
 }
 
 main();

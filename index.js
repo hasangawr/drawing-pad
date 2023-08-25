@@ -1,10 +1,26 @@
 const outerDiv = document.querySelector('.outer');
-const button = document.querySelector('.btn');
+const buttonGrid = document.querySelector('#grid');
+const buttonBlack = document.querySelector('#black');
+const buttonRandom = document.querySelector('#random');
 
 let mouseDown = false;
+let drawingColor = 'black';
 
-const draw = function (event) {
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+  
+const drawBlack = function (event) {
     event.target.style.background = 'black';
+}
+
+const drawRandomColors = function (event) {
+    const red = getRandomInt(0, 256);
+    const green = getRandomInt(0, 256);
+    const blue = getRandomInt(0, 256);
+    event.target.style.background = `rgb(${red}, ${green}, ${blue})`;
 }
 
 const createDrawingPad = function (size = 16) {
@@ -32,13 +48,21 @@ const createDrawingPad = function (size = 16) {
                     mouseDown = false;   
                 } else {
                     mouseDown = true;
-                    draw(event);
+                    if(drawingColor === 'black') {
+                        drawBlack(event);
+                    } else {
+                        drawRandomColors(event);
+                    }
                 }
             });
 
             colDiv.addEventListener('mouseenter', (event) => {
                 if(mouseDown) {
-                    draw(event);
+                    if(drawingColor === 'black') {
+                        drawBlack(event);
+                    } else {
+                        drawRandomColors(event);
+                    }
                 }
             })
             
@@ -55,7 +79,15 @@ const main = function () {
 
     createDrawingPad();
 
-    button.addEventListener('click', () => {
+    buttonBlack.addEventListener('click', () => {
+        drawingColor = 'black';
+    });
+
+    buttonRandom.addEventListener('click', () => {
+        drawingColor = 'random';
+    });
+
+    buttonGrid.addEventListener('click', () => {
         const gridSize = Number(prompt('Enter no. of squares per a side: '));
         if(gridSize > 0 && gridSize < 101) {
             mouseDown = false;

@@ -1,13 +1,19 @@
 const outerDiv = document.querySelector('.outer');
 const button = document.querySelector('.btn');
 
+let mouseDown = false;
+
+const draw = function (event) {
+    event.target.style.background = 'black';
+}
+
 const createDrawingPad = function (size = 16) {
 
     outerDiv.replaceChildren();
 
     for (let index = 0; index < size; index++) {
 
-        const rowDiv = document.createElement('div');
+        let rowDiv = document.createElement('div');
         outerDiv.appendChild(rowDiv);
 
         rowDiv.style.setProperty('flex', '1 1 auto');
@@ -16,13 +22,26 @@ const createDrawingPad = function (size = 16) {
 
         for (let index = 0; index < size; index++) {
 
-            const colDiv = document.createElement('div');
+            let colDiv = document.createElement('div');
             rowDiv.appendChild(colDiv);
 
             colDiv.style.setProperty('flex', '1 1 auto');
-            colDiv.style.setProperty('border', '1px');
-            colDiv.style.setProperty('border-style', 'solid');
-            colDiv.style.setProperty('border-color', '#E5E4E2');
+
+            colDiv.addEventListener('mousedown', (event) => {
+                if (mouseDown) {
+                    mouseDown = false;   
+                } else {
+                    mouseDown = true;
+                    draw(event);
+                }
+            });
+
+            colDiv.addEventListener('mouseenter', (event) => {
+                if(mouseDown) {
+                    draw(event);
+                }
+            })
+            
         }
     }
 
@@ -39,6 +58,7 @@ const main = function () {
     button.addEventListener('click', () => {
         const gridSize = Number(prompt('Enter no. of squares per a side: '));
         if(gridSize > 0 && gridSize < 101) {
+            mouseDown = false;
             createDrawingPad(gridSize);
         } else {
             alert('Grid size should be greater than 0 & not more than 100!');

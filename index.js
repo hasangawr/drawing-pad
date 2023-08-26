@@ -2,7 +2,9 @@ const outerDiv = document.querySelector('.outer');
 const buttonGrid = document.querySelector('#grid');
 const buttonBlack = document.querySelector('#black');
 const buttonRandom = document.querySelector('#random');
+const buttonClear = document.querySelector('#clear');
 
+let gridSize = 16;
 let mouseDown = false;
 let drawingColor = 'black';
 
@@ -13,7 +15,11 @@ function getRandomInt(min, max) {
 }
   
 const drawBlack = function (event) {
-    event.target.style.background = 'black';
+    let mouseInteractions = event.target.getAttribute('data-mouseInteractions');
+    mouseInteractions++;
+    event.target.setAttribute('data-mouseInteractions', mouseInteractions);
+    let blackIntensity = 100 - ((mouseInteractions - 1) * 10);
+    event.target.style.background = `rgb(${blackIntensity}, ${blackIntensity}, ${blackIntensity})`;
 }
 
 const drawRandomColors = function (event) {
@@ -42,6 +48,7 @@ const createDrawingPad = function (size = 16) {
             rowDiv.appendChild(colDiv);
 
             colDiv.style.setProperty('flex', '1 1 auto');
+            colDiv.setAttribute('data-mouseInteractions', 0);
 
             colDiv.addEventListener('mousedown', (event) => {
                 if (mouseDown) {
@@ -87,8 +94,13 @@ const main = function () {
         drawingColor = 'random';
     });
 
+    buttonClear.addEventListener('click', () => {
+        mouseDown = false;
+        createDrawingPad(gridSize);
+    });
+
     buttonGrid.addEventListener('click', () => {
-        const gridSize = Number(prompt('Enter no. of squares per a side: '));
+        gridSize = Number(prompt('Enter no. of squares per a side: '));
         if(gridSize > 0 && gridSize < 101) {
             mouseDown = false;
             createDrawingPad(gridSize);

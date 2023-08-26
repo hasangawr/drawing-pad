@@ -5,13 +5,12 @@ const buttonRandom = document.querySelector('#random');
 const buttonClear = document.querySelector('#clear');
 
 let gridSize = 16;
-let mouseDown = false;
 let drawingColor = 'black';
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min) + min);
 }
   
 const drawBlack = function (event) {
@@ -51,20 +50,15 @@ const createDrawingPad = function (size = 16) {
             colDiv.setAttribute('data-mouseInteractions', 0);
 
             colDiv.addEventListener('mousedown', (event) => {
-                if (mouseDown) {
-                    mouseDown = false;   
+                if(drawingColor === 'black') {
+                    drawBlack(event);
                 } else {
-                    mouseDown = true;
-                    if(drawingColor === 'black') {
-                        drawBlack(event);
-                    } else {
-                        drawRandomColors(event);
-                    }
+                    drawRandomColors(event);
                 }
             });
 
-            colDiv.addEventListener('mouseenter', (event) => {
-                if(mouseDown) {
+            colDiv.addEventListener('mouseover', (event) => {
+                if(event.buttons == 1) {
                     if(drawingColor === 'black') {
                         drawBlack(event);
                     } else {
